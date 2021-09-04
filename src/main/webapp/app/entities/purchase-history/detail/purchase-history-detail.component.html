@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="purchaseHistory">
+      <h2 data-cy="purchaseHistoryDetailsHeading"><span>Purchase History</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ purchaseHistory.id }}</span>
+        </dd>
+        <dt><span>Purchase Date</span></dt>
+        <dd>
+          <span>{{ purchaseHistory.purchaseDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Shipping Date</span></dt>
+        <dd>
+          <span>{{ purchaseHistory.shippingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Billing Address</span></dt>
+        <dd>
+          <span>{{ purchaseHistory.billingAddress }}</span>
+        </dd>
+        <dt><span>Payment Status</span></dt>
+        <dd>
+          <span>{{ purchaseHistory.paymentStatus }}</span>
+        </dd>
+        <dt><span>Cart</span></dt>
+        <dd>
+          <div *ngIf="purchaseHistory.cart">
+            <a [routerLink]="['/cart', purchaseHistory.cart?.id, 'view']">{{ purchaseHistory.cart?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Buyer</span></dt>
+        <dd>
+          <div *ngIf="purchaseHistory.buyer">
+            <a [routerLink]="['/user-extra', purchaseHistory.buyer?.id, 'view']">{{ purchaseHistory.buyer?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/purchase-history', purchaseHistory.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

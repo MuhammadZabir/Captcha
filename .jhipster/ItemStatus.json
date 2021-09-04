@@ -1,0 +1,38 @@
+{
+  "name": "ItemStatus",
+  "fields": [
+    {
+      "fieldName": "amountAvailable",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "amountSold",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "availabilityStatus",
+      "fieldType": "AvailabilityStatus",
+      "fieldValues": "AVAILABLE,SOLD_OUT"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "item",
+      "otherEntityRelationshipName": "itemStatus",
+      "relationshipName": "item",
+      "ownerSide": true
+    }
+  ],
+  "javadoc": "The ItemStatus entity.",
+  "entityTableName": "item_status",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084657"
+}

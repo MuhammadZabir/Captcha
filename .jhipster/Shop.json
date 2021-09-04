@@ -1,0 +1,49 @@
+{
+  "name": "Shop",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "userExtra",
+      "otherEntityRelationshipName": "shop",
+      "relationshipName": "owner",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "item",
+      "otherEntityRelationshipName": "shop",
+      "relationshipName": "item"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "shopReview",
+      "otherEntityRelationshipName": "shop",
+      "relationshipName": "shopReview"
+    }
+  ],
+  "javadoc": "The Shop entity.",
+  "entityTableName": "shop",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084658"
+}

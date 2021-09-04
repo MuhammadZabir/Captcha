@@ -1,0 +1,52 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="shopReview">
+      <h2 data-cy="shopReviewDetailsHeading"><span>Shop Review</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ shopReview.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ shopReview.description }}</span>
+        </dd>
+        <dt><span>Rating</span></dt>
+        <dd>
+          <span>{{ shopReview.rating }}</span>
+        </dd>
+        <dt><span>Review Date</span></dt>
+        <dd>
+          <span>{{ shopReview.reviewDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Reviewer</span></dt>
+        <dd>
+          <div *ngIf="shopReview.reviewer">
+            <a [routerLink]="['/user-extra', shopReview.reviewer?.id, 'view']">{{ shopReview.reviewer?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Shop</span></dt>
+        <dd>
+          <div *ngIf="shopReview.shop">
+            <a [routerLink]="['/shop', shopReview.shop?.id, 'view']">{{ shopReview.shop?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/shop-review', shopReview.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

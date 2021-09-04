@@ -1,0 +1,11 @@
+id;purchase_date;shipping_date;billing_address;payment_status
+1;2021-09-03;2021-09-03;calculating;PENDING
+2;2021-09-03;2021-09-04;quantifying;PAID
+3;2021-09-03;2021-09-03;Minnesota architect;PENDING
+4;2021-09-04;2021-09-03;neutral copying Market;PENDING
+5;2021-09-03;2021-09-04;Mouse Pine;PENDING
+6;2021-09-03;2021-09-03;Lari Investment Kids;PAID
+7;2021-09-04;2021-09-03;Organized;PAID
+8;2021-09-03;2021-09-03;Mouse;PAID
+9;2021-09-03;2021-09-03;Gorgeous;PENDING
+10;2021-09-03;2021-09-03;transmitting;PENDING

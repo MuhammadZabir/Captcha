@@ -1,0 +1,43 @@
+{
+  "name": "ItemReview",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "rating",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "reviewDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "userExtra",
+      "otherEntityRelationshipName": "itemReview",
+      "relationshipName": "reviewer",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "item",
+      "otherEntityRelationshipName": "itemReview",
+      "relationshipName": "item"
+    }
+  ],
+  "javadoc": "The ItemReview entity.",
+  "entityTableName": "item_review",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084702"
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity ShopReview.
+    -->
+    <changeSet id="20210904084701-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="reviewer_id"
+                                 baseTableName="shop_review"
+                                 constraintName="fk_shop_review__reviewer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_extra"/>
+
+        <addForeignKeyConstraint baseColumnNames="shop_id"
+                                 baseTableName="shop_review"
+                                 constraintName="fk_shop_review__shop_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="shop"/>
+    </changeSet>
+</databaseChangeLog>

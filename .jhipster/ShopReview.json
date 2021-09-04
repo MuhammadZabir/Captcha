@@ -1,0 +1,43 @@
+{
+  "name": "ShopReview",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "rating",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "reviewDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "userExtra",
+      "otherEntityRelationshipName": "shopReview",
+      "relationshipName": "reviewer",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "shop",
+      "otherEntityRelationshipName": "shopReview",
+      "relationshipName": "shop"
+    }
+  ],
+  "javadoc": "The ShopReview entity.",
+  "entityTableName": "shop_review",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084701"
+}

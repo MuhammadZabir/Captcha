@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity PurchaseHistory.
+    -->
+    <changeSet id="20210904084703-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="cart_id"
+                                 baseTableName="purchase_history"
+                                 constraintName="fk_purchase_history__cart_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cart"/>
+
+        <addForeignKeyConstraint baseColumnNames="buyer_id"
+                                 baseTableName="purchase_history"
+                                 constraintName="fk_purchase_history__buyer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_extra"/>
+    </changeSet>
+</databaseChangeLog>

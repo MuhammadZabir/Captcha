@@ -1,0 +1,34 @@
+{
+  "name": "Cart",
+  "fields": [
+    {
+      "fieldName": "totalPrice",
+      "fieldType": "Double"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "userExtra",
+      "otherEntityRelationshipName": "cart",
+      "relationshipName": "buyer",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "cartBasket",
+      "otherEntityRelationshipName": "cart",
+      "relationshipName": "cartBasket"
+    }
+  ],
+  "entityTableName": "cart",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084704"
+}

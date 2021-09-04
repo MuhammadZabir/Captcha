@@ -1,0 +1,48 @@
+{
+  "name": "PurchaseHistory",
+  "fields": [
+    {
+      "fieldName": "purchaseDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "shippingDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "billingAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "paymentStatus",
+      "fieldType": "PaymentStatus",
+      "fieldValues": "PAID,PENDING"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "cart",
+      "otherEntityRelationshipName": "purchaseHistory",
+      "relationshipName": "cart",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userExtra",
+      "otherEntityRelationshipName": "purchaseHistory",
+      "relationshipName": "buyer"
+    }
+  ],
+  "javadoc": "The PurchaseHistory entity.",
+  "entityTableName": "purchase_history",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084703"
+}

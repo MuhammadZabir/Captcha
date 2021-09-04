@@ -1,0 +1,96 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-item-review-heading" data-cy="ItemReviewCreateUpdateHeading">Create or edit a Item Review</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rating">Rating</label>
+          <input type="number" class="form-control" name="rating" id="field_rating" data-cy="rating" formControlName="rating" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reviewDate">Review Date</label>
+          <div class="input-group">
+            <input
+              id="field_reviewDate"
+              data-cy="reviewDate"
+              type="text"
+              class="form-control"
+              name="reviewDate"
+              ngbDatepicker
+              #reviewDateDp="ngbDatepicker"
+              formControlName="reviewDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reviewDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reviewer">Reviewer</label>
+          <select class="form-control" id="field_reviewer" data-cy="reviewer" name="reviewer" formControlName="reviewer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="userExtraOption.id === editForm.get('reviewer')!.value?.id ? editForm.get('reviewer')!.value : userExtraOption"
+              *ngFor="let userExtraOption of reviewersCollection; trackBy: trackUserExtraById"
+            >
+              {{ userExtraOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_item">Item</label>
+          <select class="form-control" id="field_item" data-cy="item" name="item" formControlName="item">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="itemOption.id === editForm.get('item')!.value?.id ? editForm.get('item')!.value : itemOption"
+              *ngFor="let itemOption of itemsSharedCollection; trackBy: trackItemById"
+            >
+              {{ itemOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

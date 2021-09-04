@@ -1,0 +1,52 @@
+{
+  "name": "Item",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Double"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "image",
+      "otherEntityRelationshipName": "item",
+      "relationshipName": "image"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "itemReview",
+      "otherEntityRelationshipName": "item",
+      "relationshipName": "itemReview"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "shop",
+      "otherEntityRelationshipName": "item",
+      "relationshipName": "shop"
+    }
+  ],
+  "javadoc": "The Item entity.",
+  "entityTableName": "item",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084655"
+}

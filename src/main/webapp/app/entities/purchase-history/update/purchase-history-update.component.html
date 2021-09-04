@@ -1,0 +1,127 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-purchase-history-heading" data-cy="PurchaseHistoryCreateUpdateHeading">Create or edit a Purchase History</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchaseDate">Purchase Date</label>
+          <div class="input-group">
+            <input
+              id="field_purchaseDate"
+              data-cy="purchaseDate"
+              type="text"
+              class="form-control"
+              name="purchaseDate"
+              ngbDatepicker
+              #purchaseDateDp="ngbDatepicker"
+              formControlName="purchaseDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="purchaseDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_shippingDate">Shipping Date</label>
+          <div class="input-group">
+            <input
+              id="field_shippingDate"
+              data-cy="shippingDate"
+              type="text"
+              class="form-control"
+              name="shippingDate"
+              ngbDatepicker
+              #shippingDateDp="ngbDatepicker"
+              formControlName="shippingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="shippingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_billingAddress">Billing Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="billingAddress"
+            id="field_billingAddress"
+            data-cy="billingAddress"
+            formControlName="billingAddress"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentStatus">Payment Status</label>
+          <select
+            class="form-control"
+            name="paymentStatus"
+            formControlName="paymentStatus"
+            id="field_paymentStatus"
+            data-cy="paymentStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option value="PAID">PAID</option>
+            <option value="PENDING">PENDING</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cart">Cart</label>
+          <select class="form-control" id="field_cart" data-cy="cart" name="cart" formControlName="cart">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="cartOption.id === editForm.get('cart')!.value?.id ? editForm.get('cart')!.value : cartOption"
+              *ngFor="let cartOption of cartsCollection; trackBy: trackCartById"
+            >
+              {{ cartOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_buyer">Buyer</label>
+          <select class="form-control" id="field_buyer" data-cy="buyer" name="buyer" formControlName="buyer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="userExtraOption.id === editForm.get('buyer')!.value?.id ? editForm.get('buyer')!.value : userExtraOption"
+              *ngFor="let userExtraOption of userExtrasSharedCollection; trackBy: trackUserExtraById"
+            >
+              {{ userExtraOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+{
+  "name": "UserExtra",
+  "fields": [
+    {
+      "fieldName": "billingAddress",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "userExtra",
+      "relationshipName": "user",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "purchaseHistory",
+      "otherEntityRelationshipName": "buyer",
+      "relationshipName": "purchaseHistory"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userType",
+      "otherEntityRelationshipName": "userExtra",
+      "relationshipName": "userType"
+    }
+  ],
+  "javadoc": "The UserExtra entity.",
+  "entityTableName": "user_extra",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084659"
+}

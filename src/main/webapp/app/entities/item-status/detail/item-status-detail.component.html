@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="itemStatus">
+      <h2 data-cy="itemStatusDetailsHeading"><span>Item Status</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ itemStatus.id }}</span>
+        </dd>
+        <dt><span>Amount Available</span></dt>
+        <dd>
+          <span>{{ itemStatus.amountAvailable }}</span>
+        </dd>
+        <dt><span>Amount Sold</span></dt>
+        <dd>
+          <span>{{ itemStatus.amountSold }}</span>
+        </dd>
+        <dt><span>Availability Status</span></dt>
+        <dd>
+          <span>{{ itemStatus.availabilityStatus }}</span>
+        </dd>
+        <dt><span>Item</span></dt>
+        <dd>
+          <div *ngIf="itemStatus.item">
+            <a [routerLink]="['/item', itemStatus.item?.id, 'view']">{{ itemStatus.item?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/item-status', itemStatus.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

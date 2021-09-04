@@ -1,0 +1,41 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  captcha-app:
+    image: captcha
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_R2DBC_URL=r2dbc:mariadb://captcha-mariadb:3306/captcha?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_LIQUIBASE_URL=jdbc:mariadb://captcha-mariadb:3306/captcha?useLegacyDatetimeCode=false&serverTimezone=UTC
+      - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
+      - SPRING_ELASTICSEARCH_REST_URIS=http://captcha-elasticsearch:9200
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:8080:8080
+  captcha-mariadb:
+    image: mariadb:10.6.1
+    # volumes:
+    #   - ~/volumes/jhipster/Captcha/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=captcha
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  captcha-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    # volumes:
+    #   - ~/volumes/jhipster/Captcha/elasticsearch/:/usr/share/elasticsearch/data/
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
+    environment:
+      - 'ES_JAVA_OPTS=-Xms1024m -Xmx1024m'
+      - 'discovery.type=single-node'

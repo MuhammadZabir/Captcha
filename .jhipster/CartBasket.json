@@ -1,0 +1,27 @@
+{
+  "name": "CartBasket",
+  "fields": [
+    {
+      "fieldName": "amount",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cart",
+      "otherEntityRelationshipName": "cartBasket",
+      "relationshipName": "cart"
+    }
+  ],
+  "entityTableName": "cart_basket",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210904084705"
+}

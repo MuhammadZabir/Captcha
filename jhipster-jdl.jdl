@@ -1,0 +1,126 @@
+/**
+ * The Item entity.
+ */
+entity Item {
+	name String,
+    description String,
+    category String,
+    price Double
+}
+
+/**
+ * The Image entity.
+ */
+entity Image {
+	imageDir String
+}
+
+/**
+ * The ItemStatus entity.
+ */
+entity ItemStatus {
+	amountAvailable Integer,
+    amountSold Integer,
+    availabilityStatus AvailabilityStatus
+}
+
+enum AvailabilityStatus {
+	AVAILABLE, SOLD_OUT
+}
+
+/**
+ * The Shop entity.
+ */
+entity Shop {
+	name String,
+    description String,
+    createdDate LocalDate
+}
+
+/**
+ * The UserExtra entity.
+ */
+entity UserExtra {
+	billingAddress String
+}
+
+/**
+ * The UserType entity.
+ */
+entity UserType {
+	name String,
+	description String
+}
+
+/**
+ * The ShopReview entity.
+ */
+entity ShopReview {
+	description String,
+    rating Integer,
+    reviewDate LocalDate
+}
+
+/**
+ * The ItemReview entity.
+ */
+entity ItemReview {
+	description String,
+    rating Integer,
+    reviewDate LocalDate
+}
+
+/**
+ * The PurchaseHistory entity.
+ */
+entity PurchaseHistory {
+	purchaseDate LocalDate,
+    shippingDate LocalDate,
+    billingAddress String,
+    paymentStatus PaymentStatus
+}
+
+enum PaymentStatus {
+	PAID, PENDING
+}
+
+entity Cart {
+	totalPrice Double
+}
+
+entity CartBasket {
+	amount Integer
+}
+
+relationship OneToOne {
+	ItemStatus{item} to Item,
+	UserExtra{user} to User,
+    Shop{owner} to UserExtra,
+	ItemStatus{item} to Item,
+    ItemReview{reviewer} to UserExtra,
+    ShopReview{reviewer} to UserExtra,
+    PurchaseHistory{cart} to Cart,
+    Cart{buyer} to UserExtra
+}
+
+relationship OneToMany {
+	UserType to UserExtra{userType},
+	UserExtra to PurchaseHistory{buyer},
+	Shop to Item{shop},
+    Shop to ShopReview{shop},
+	Item to Image{item},
+    Item to ItemReview{item},
+    Cart to CartBasket{cart}
+}
+
+// Set pagination options
+paginate UserExtra, Item, Shop with pagination
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+// angularSuffix * with mySuffix

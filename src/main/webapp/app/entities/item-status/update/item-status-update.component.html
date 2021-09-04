@@ -1,0 +1,84 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-item-status-heading" data-cy="ItemStatusCreateUpdateHeading">Create or edit a Item Status</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_amountAvailable">Amount Available</label>
+          <input
+            type="number"
+            class="form-control"
+            name="amountAvailable"
+            id="field_amountAvailable"
+            data-cy="amountAvailable"
+            formControlName="amountAvailable"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_amountSold">Amount Sold</label>
+          <input
+            type="number"
+            class="form-control"
+            name="amountSold"
+            id="field_amountSold"
+            data-cy="amountSold"
+            formControlName="amountSold"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_availabilityStatus">Availability Status</label>
+          <select
+            class="form-control"
+            name="availabilityStatus"
+            formControlName="availabilityStatus"
+            id="field_availabilityStatus"
+            data-cy="availabilityStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option value="AVAILABLE">AVAILABLE</option>
+            <option value="SOLD_OUT">SOLD_OUT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_item">Item</label>
+          <select class="form-control" id="field_item" data-cy="item" name="item" formControlName="item">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="itemOption.id === editForm.get('item')!.value?.id ? editForm.get('item')!.value : itemOption"
+              *ngFor="let itemOption of itemsCollection; trackBy: trackItemById"
+            >
+              {{ itemOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
