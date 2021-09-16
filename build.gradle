@@ -206,6 +206,7 @@ dependencies {
     implementation "org.mariadb.jdbc:mariadb-java-client"
         implementation "org.mariadb:r2dbc-mariadb"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    implementation "cn.apiclub.tool:simplecaptcha:1.2.2"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxbRuntimeVersion}"

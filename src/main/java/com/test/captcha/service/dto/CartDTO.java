@@ -12,6 +12,12 @@ public class CartDTO implements Serializable {
 
     private Double totalPrice;
 
+    private String captcha;
+
+    private String hiddenCaptcha;
+
+    private String realCaptcha;
+
     private UserExtraDTO buyer;
 
     public Long getId() {
@@ -28,6 +34,30 @@ public class CartDTO implements Serializable {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
+    }
+
+    public String getHiddenCaptcha() {
+        return hiddenCaptcha;
+    }
+
+    public void setHiddenCaptcha(String hiddenCaptcha) {
+        this.hiddenCaptcha = hiddenCaptcha;
+    }
+
+    public String getRealCaptcha() {
+        return realCaptcha;
+    }
+
+    public void setRealCaptcha(String realCaptcha) {
+        this.realCaptcha = realCaptcha;
     }
 
     public UserExtraDTO getBuyer() {
@@ -65,6 +95,9 @@ public class CartDTO implements Serializable {
         return "CartDTO{" +
             "id=" + getId() +
             ", totalPrice=" + getTotalPrice() +
+            ", getCaptcha=" + getCaptcha() +
+            ", getHiddenCaptcha=" + getHiddenCaptcha() +
+            ", getRealCaptcha=" + getRealCaptcha() +
             ", buyer=" + getBuyer() +
             "}";
     }

@@ -34,6 +34,9 @@ public class Cart implements Serializable {
     @JsonIgnoreProperties(value = { "cart" }, allowSetters = true)
     private Set<CartBasket> cartBaskets = new HashSet<>();
 
+    @Transient
+    private String captcha;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -113,6 +116,14 @@ public class Cart implements Serializable {
             cartBaskets.forEach(i -> i.setCart(this));
         }
         this.cartBaskets = cartBaskets;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
+    }
+
+    public String getCaptcha(String captcha) {
+        return this.captcha;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

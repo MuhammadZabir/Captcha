@@ -1,8 +1,10 @@
 package com.test.captcha.web.rest;
 
+import cn.apiclub.captcha.Captcha;
 import com.test.captcha.repository.CartRepository;
 import com.test.captcha.service.CartService;
 import com.test.captcha.service.dto.CartDTO;
+import com.test.captcha.utility.UtilityCaptcha;
 import com.test.captcha.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -236,5 +238,38 @@ public class CartResource {
     public Mono<List<CartDTO>> searchCarts(@RequestParam String query) {
         log.debug("REST request to search Carts for query {}", query);
         return cartService.search(query).collectList();
+    }
+
+    /**
+     * {@code PATCH  /carts/captcha/:id} : Get particular captcha of an existing cart, field will ignore if it is null
+     *
+     * @param id the id of the cartDTO to save.
+     * @param cartDTO the cartDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated cartDTO,
+     * or with status {@code 400 (Bad Request)} if the cartDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the cartDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the cartDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "carts/captcha/{id}", consumes = "application/merge-patch+json")
+    public Mono<ResponseEntity<CartDTO>> getCaptcha(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody CartDTO cartDTO
+    ) {
+        log.debug("REST request to get Captcha for Cart : {}, {}", id, cartDTO);
+        if (cartDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, cartDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        Captcha captcha = UtilityCaptcha.createCaptcha(240, 70);
+        cartDTO.setHiddenCaptcha(captcha.getAnswer());
+        cartDTO.setRealCaptcha(UtilityCaptcha.encodeCaptcha(captcha));
+
+        return Mono.just(ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, cartDTO.getId()
+                .toString())).body(cartDTO));
     }
 }
