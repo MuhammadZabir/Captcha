@@ -68,4 +68,20 @@ public interface CartBasketService {
      * @return the list of entities.
      */
     Flux<CartBasketDTO> search(String query);
+
+    /**
+     * Get all CartBaskets by Cart Id.
+     *
+     * @param id the id of Cart entity.
+     * @return
+     */
+    Flux<CartBasketDTO> findAllByCartId(Long id);
+
+    /**
+     * Get all CartBaskets by Item Id.
+     *
+     * @param id the id of Item entity.
+     * @return
+     */
+    Flux<CartBasketDTO> findAllByItemId(Long id);
 }

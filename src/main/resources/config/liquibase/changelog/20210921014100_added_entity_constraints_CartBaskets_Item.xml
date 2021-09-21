@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity CartBasket.
+    -->
+    <changeSet id="20210921014100-1" author="jhipster">
+
+        <addColumn tableName="cart_basket">
+            <column name="item_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseColumnNames="item_id"
+                                 baseTableName="cart_basket"
+                                 constraintName="fk_cart_basket__item_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="item"/>
+    </changeSet>
+
+</databaseChangeLog>

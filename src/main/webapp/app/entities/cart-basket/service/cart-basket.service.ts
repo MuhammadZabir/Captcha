@@ -38,6 +38,14 @@ export class CartBasketService {
     return this.http.get<ICartBasket>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByCartId(id: number): Observable<EntityArrayResponseType> {
+    return this.http.get<ICartBasket[]>(`${this.resourceUrl}/cart/${id}`, { observe: 'response' });
+  }
+
+  findByItemId(id: number): Observable<EntityArrayResponseType> {
+    return this.http.get<ICartBasket[]>(`${this.resourceUrl}/item/${id}`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ICartBasket[]>(this.resourceUrl, { params: options, observe: 'response' });

@@ -1,6 +1,7 @@
 import { IImage } from 'app/entities/image/image.model';
 import { IItemReview } from 'app/entities/item-review/item-review.model';
 import { IShop } from 'app/entities/shop/shop.model';
+import { ICartBasket } from 'app/entities/cart-basket/cart-basket.model';
 
 export interface IItem {
   id?: number;
@@ -10,6 +11,7 @@ export interface IItem {
   price?: number | null;
   images?: IImage[] | null;
   itemReviews?: IItemReview[] | null;
+  cartBaskets?: ICartBasket[] | null;
   shop?: IShop | null;
 }
 
@@ -22,6 +24,7 @@ export class Item implements IItem {
     public price?: number | null,
     public images?: IImage[] | null,
     public itemReviews?: IItemReview[] | null,
+    public cartBaskets?: ICartBasket[] | null,
     public shop?: IShop | null
   ) {}
 }

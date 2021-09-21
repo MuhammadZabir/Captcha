@@ -237,4 +237,30 @@ public class CartBasketResource {
         log.debug("REST request to search CartBaskets for query {}", query);
         return cartBasketService.search(query).collectList();
     }
+
+    /**
+     * {@code GET /cart-baskets/cart/:id} : get the "id" cart.
+     *
+     * @param cartId the id of the cartDTO corresponds with the CartBasketsDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cartBaskets in body.
+     */
+    @GetMapping("/cart-baskets/cart/{id}")
+    public Mono<List<CartBasketDTO>> getCartBasketsByCart(@RequestParam Long cartId) {
+        log.debug("Rest request to get all CartBaskets by Cart Id : {}", cartId);
+
+        return cartBasketService.findAllByCartId(cartId).collectList();
+    }
+
+    /**
+     * {@code GET /cart-baskets/item/:id} : get the "id" item.
+     *
+     * @param itemId the id of the itemDTO corresponds with the CartBasketsDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cartBaskets in body.
+     */
+    @GetMapping("/cart-baskets/item/{id}")
+    public Mono<List<CartBasketDTO>> getCartBasketsByItem(@RequestParam Long itemId) {
+        log.debug("Rest request to get all CartBaskets by Item Id : {}", itemId);
+
+        return cartBasketService.findAllByItemId(itemId).collectList();
+    }
 }

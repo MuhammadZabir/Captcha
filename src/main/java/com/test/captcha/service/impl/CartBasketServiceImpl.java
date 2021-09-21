@@ -111,4 +111,18 @@ public class CartBasketServiceImpl implements CartBasketService {
         log.debug("Request to search CartBaskets for query {}", query);
         return cartBasketSearchRepository.search(query).map(cartBasketMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Flux<CartBasketDTO> findAllByCartId(Long id) {
+        log.debug("Request to get all CartBaskets by Cart id : {}", id);
+        return cartBasketRepository.findByCart(id).map(cartBasketMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Flux<CartBasketDTO> findAllByItemId(Long id) {
+        log.debug("Request to get all CartBaskets by Item id : {}", id);
+        return cartBasketRepository.findByItem(id).map(cartBasketMapper::toDto);
+    }
 }

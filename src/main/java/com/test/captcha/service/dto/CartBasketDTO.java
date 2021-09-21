@@ -14,6 +14,8 @@ public class CartBasketDTO implements Serializable {
 
     private CartDTO cart;
 
+    private ItemDTO item;
+
     public Long getId() {
         return id;
     }
@@ -36,6 +38,14 @@ public class CartBasketDTO implements Serializable {
 
     public void setCart(CartDTO cart) {
         this.cart = cart;
+    }
+
+    public ItemDTO getItem() {
+        return item;
+    }
+
+    public void setItem(ItemDTO item) {
+        this.item = item;
     }
 
     @Override
@@ -66,6 +76,7 @@ public class CartBasketDTO implements Serializable {
             "id=" + getId() +
             ", amount=" + getAmount() +
             ", cart=" + getCart() +
+            ", item=" + getItem() +
             "}";
     }
 }

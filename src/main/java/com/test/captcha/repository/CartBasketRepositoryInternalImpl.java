@@ -1,20 +1,18 @@
 package com.test.captcha.repository;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
-import static org.springframework.data.relational.core.query.Query.query;
 
 import com.test.captcha.domain.CartBasket;
 import com.test.captcha.repository.rowmapper.CartBasketRowMapper;
 import com.test.captcha.repository.rowmapper.CartRowMapper;
+import com.test.captcha.repository.rowmapper.ItemRowMapper;
 import com.test.captcha.service.EntityManager;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.function.BiFunction;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
@@ -39,22 +37,26 @@ class CartBasketRepositoryInternalImpl implements CartBasketRepositoryInternal {
     private final EntityManager entityManager;
 
     private final CartRowMapper cartMapper;
-    private final CartBasketRowMapper cartbasketMapper;
+    private final ItemRowMapper itemMapper;
+    private final CartBasketRowMapper cartBasketMapper;
 
     private static final Table entityTable = Table.aliased("cart_basket", EntityManager.ENTITY_ALIAS);
     private static final Table cartTable = Table.aliased("cart", "cart");
+    private static final Table itemTable = Table.aliased("item", "item");
 
     public CartBasketRepositoryInternalImpl(
         R2dbcEntityTemplate template,
         EntityManager entityManager,
         CartRowMapper cartMapper,
-        CartBasketRowMapper cartbasketMapper
+        ItemRowMapper itemMapper,
+        CartBasketRowMapper cartBasketMapper
     ) {
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
         this.cartMapper = cartMapper;
-        this.cartbasketMapper = cartbasketMapper;
+        this.itemMapper = itemMapper;
+        this.cartBasketMapper = cartBasketMapper;
     }
 
     @Override
@@ -70,13 +72,17 @@ class CartBasketRepositoryInternalImpl implements CartBasketRepositoryInternal {
     RowsFetchSpec<CartBasket> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = CartBasketSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
         columns.addAll(CartSqlHelper.getColumns(cartTable, "cart"));
+        columns.addAll(ItemSqlHelper.getColumns(itemTable, "item"));
         SelectFromAndJoinCondition selectFrom = Select
             .builder()
             .select(columns)
             .from(entityTable)
             .leftOuterJoin(cartTable)
             .on(Column.create("cart_id", entityTable))
-            .equals(Column.create("id", cartTable));
+            .equals(Column.create("id", cartTable))
+            .leftOuterJoin(itemTable)
+            .on(Column.create("item_id", entityTable))
+            .equals(Column.create("id", itemTable));
 
         String select = entityManager.createSelect(selectFrom, CartBasket.class, pageable, criteria);
         String alias = entityTable.getReferenceName().getReference();
@@ -108,8 +114,9 @@ class CartBasketRepositoryInternalImpl implements CartBasketRepositoryInternal {
     }
 
     private CartBasket process(Row row, RowMetadata metadata) {
-        CartBasket entity = cartbasketMapper.apply(row, "e");
+        CartBasket entity = cartBasketMapper.apply(row, "e");
         entity.setCart(cartMapper.apply(row, "cart"));
+        entity.setItem(itemMapper.apply(row, "item"));
         return entity;
     }
 
@@ -150,6 +157,7 @@ class CartBasketSqlHelper {
         columns.add(Column.aliased("amount", table, columnPrefix + "_amount"));
 
         columns.add(Column.aliased("cart_id", table, columnPrefix + "_cart_id"));
+        columns.add(Column.aliased("item_id", table, columnPrefix + "_item_id"));
         return columns;
     }
 }

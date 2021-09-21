@@ -1,7 +1,6 @@
 package com.test.captcha.repository;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
-import static org.springframework.data.relational.core.query.Query.query;
 
 import com.test.captcha.domain.ItemReview;
 import com.test.captcha.repository.rowmapper.ItemReviewRowMapper;
@@ -10,13 +9,11 @@ import com.test.captcha.repository.rowmapper.UserExtraRowMapper;
 import com.test.captcha.service.EntityManager;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.function.BiFunction;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
@@ -40,9 +37,9 @@ class ItemReviewRepositoryInternalImpl implements ItemReviewRepositoryInternal {
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
 
-    private final UserExtraRowMapper userextraMapper;
+    private final UserExtraRowMapper userExtraMapper;
     private final ItemRowMapper itemMapper;
-    private final ItemReviewRowMapper itemreviewMapper;
+    private final ItemReviewRowMapper itemReviewMapper;
 
     private static final Table entityTable = Table.aliased("item_review", EntityManager.ENTITY_ALIAS);
     private static final Table reviewerTable = Table.aliased("user_extra", "reviewer");
@@ -51,16 +48,16 @@ class ItemReviewRepositoryInternalImpl implements ItemReviewRepositoryInternal {
     public ItemReviewRepositoryInternalImpl(
         R2dbcEntityTemplate template,
         EntityManager entityManager,
-        UserExtraRowMapper userextraMapper,
+        UserExtraRowMapper userExtraMapper,
         ItemRowMapper itemMapper,
-        ItemReviewRowMapper itemreviewMapper
+        ItemReviewRowMapper itemReviewMapper
     ) {
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
-        this.userextraMapper = userextraMapper;
+        this.userExtraMapper = userExtraMapper;
         this.itemMapper = itemMapper;
-        this.itemreviewMapper = itemreviewMapper;
+        this.itemReviewMapper = itemReviewMapper;
     }
 
     @Override
@@ -118,8 +115,8 @@ class ItemReviewRepositoryInternalImpl implements ItemReviewRepositoryInternal {
     }
 
     private ItemReview process(Row row, RowMetadata metadata) {
-        ItemReview entity = itemreviewMapper.apply(row, "e");
-        entity.setReviewer(userextraMapper.apply(row, "reviewer"));
+        ItemReview entity = itemReviewMapper.apply(row, "e");
+        entity.setReviewer(userExtraMapper.apply(row, "reviewer"));
         entity.setItem(itemMapper.apply(row, "item"));
         return entity;
     }

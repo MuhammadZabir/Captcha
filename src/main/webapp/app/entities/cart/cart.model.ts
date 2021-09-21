@@ -5,8 +5,8 @@ export interface ICart {
   id?: number;
   totalPrice?: number | null;
   captcha?: string | null;
-  hiddenCaptcha?: string : null;
-  realCaptcha?: string : null;
+  hiddenCaptcha?: string | null;
+  realCaptcha?: string | null;
   buyer?: IUserExtra | null;
   cartBaskets?: ICartBasket[] | null;
 }

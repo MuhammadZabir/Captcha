@@ -42,6 +42,10 @@ public class Item implements Serializable {
     @JsonIgnoreProperties(value = { "reviewer", "item" }, allowSetters = true)
     private Set<ItemReview> itemReviews = new HashSet<>();
 
+    @Transient
+    @JsonIgnoreProperties(value = { "item", "cart" }, allowSetters = true)
+    private Set<CartBasket> cartBaskets = new HashSet<>();
+
     @JsonIgnoreProperties(value = { "owner", "items", "shopReviews" }, allowSetters = true)
     @Transient
     private Shop shop;
@@ -175,6 +179,37 @@ public class Item implements Serializable {
             itemReviews.forEach(i -> i.setItem(this));
         }
         this.itemReviews = itemReviews;
+    }
+
+    public Set<CartBasket> getCartBaskets() {
+        return this.cartBaskets;
+    }
+
+    public Item cartBaskets(Set<CartBasket> cartBaskets) {
+        this.setCartBaskets(cartBaskets);
+        return this;
+    }
+
+    public Item addCartBasket(CartBasket cartBasket) {
+        this.cartBaskets.add(cartBasket);
+        cartBasket.setItem(this);
+        return this;
+    }
+
+    public Item removeCartBasket(CartBasket cartBasket) {
+        this.cartBaskets.remove(cartBasket);
+        cartBasket.setItem(null);
+        return this;
+    }
+
+    public void setCartBaskets(Set<CartBasket> cartBaskets) {
+        if (this.cartBaskets != null) {
+            this.cartBaskets.forEach(i -> i.setItem(null));
+        }
+        if (cartBaskets != null) {
+            cartBaskets.forEach(i -> i.setItem(this));
+        }
+        this.cartBaskets = cartBaskets;
     }
 
     public Shop getShop() {

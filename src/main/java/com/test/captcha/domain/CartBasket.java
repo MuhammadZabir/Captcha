@@ -30,6 +30,13 @@ public class CartBasket implements Serializable {
     @Column("cart_id")
     private Long cartId;
 
+    @JsonIgnoreProperties(value = { "images", "itemReviews", "shop", "cartBaskets" }, allowSetters = true)
+    @Transient
+    private Item item;
+
+    @Column("item_id")
+    private Long itemId;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -78,6 +85,29 @@ public class CartBasket implements Serializable {
 
     public void setCartId(Long cart) {
         this.cartId = cart;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public CartBasket item(Item item) {
+        this.setItem(item);
+        this.itemId = item != null ? item.getId() : null;
+        return this;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+        this.itemId = item != null ? item.getId() : null;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
