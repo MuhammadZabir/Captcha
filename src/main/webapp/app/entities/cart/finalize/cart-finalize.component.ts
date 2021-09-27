@@ -19,6 +19,7 @@ import { CartBasketService } from 'app/entities/cart-basket/service/cart-basket.
 export class CartFinalizeComponent implements OnInit {
   isSaving = false;
 
+  totalPrice = 0;
   buyersCollection: IUserExtra[] = [];
   cartBasketsCollection: ICartBasket[] = [];
 
@@ -44,7 +45,7 @@ export class CartFinalizeComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ cart }) => {
       this.updateForm(cart);
 
-      this.loadRelationshipsOptions();
+      this.loadRelationshipsOptions(cart.id!);
     });
   }
 
@@ -87,6 +88,8 @@ export class CartFinalizeComponent implements OnInit {
 
   protected updateForm(cart: ICart): void {
     this.cartService.getCaptcha(cart).pipe(finalize(() => this.onSaveFinalize())).subscribe();
+    this.cartBasketService.findByCartId(cart.id!).pipe(map((res: HttpResponse<ICartBasket[]>) => res.body ?? []))
+    .subscribe((cartBaskets: ICartBasket[]) => (this.cartBasketsCollection = cartBaskets));
     this.editForm.patchValue({
       id: cart.id,
       totalPrice: cart.totalPrice,
@@ -95,8 +98,9 @@ export class CartFinalizeComponent implements OnInit {
       buyer: cart.buyer,
     });
 
+    this.calculatingTotalPrice();
+
     this.buyersCollection = this.userExtraService.addUserExtraToCollectionIfMissing(this.buyersCollection, cart.buyer);
-    this.cartBasketsCollection = this.cartBasketService.findByCartId(cart.id);
   }
 
   protected loadRelationshipsOptions(id: number): void {
@@ -109,8 +113,6 @@ export class CartFinalizeComponent implements OnInit {
         )
       )
       .subscribe((userExtras: IUserExtra[]) => (this.buyersCollection = userExtras));
-
-    this.cartBasketService.findByCartId(id).pipe()
   }
 
   protected createFromForm(): ICart {
@@ -118,7 +120,20 @@ export class CartFinalizeComponent implements OnInit {
       ...new Cart(),
       id: this.editForm.get(['id'])!.value,
       totalPrice: this.editForm.get(['totalPrice'])!.value,
+      hiddenCaptcha: this.editForm.get(['hiddenCaptcha'])!.value,
+      realCaptcha: this.editForm.get(['realCaptcha'])!.value,
       buyer: this.editForm.get(['buyer'])!.value,
     };
+  }
+
+  protected calculatingTotalPrice(): void {
+    this.totalPrice = 0;
+    for (const cartBasket of this.cartBasketsCollection) {
+      let price = 0;
+      if (cartBasket.item?.price) {
+        price = cartBasket.item.price;
+      }
+      this.totalPrice = this.totalPrice + price;
+    }
   }
 }
