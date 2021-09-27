@@ -7,18 +7,24 @@ import { ICartBasket } from 'app/entities/cart-basket/cart-basket.model';
   providedIn: 'root',
 })
 export class CartSharedService {
-  cartValue: ICart = [];
-  cart: BehaviorSubject<Cart>;
+  cartValue = <ICart>{};
+  cart: BehaviorSubject<ICart>;
 
   constructor() {
     this.cart = new BehaviorSubject(this.cartValue);
   }
 
-  addCartBasket(cartBasket: ICartBasket) {
-    this.count.next(this.cartValue.cartBasket.push(cartBasket);
+  addCartBasket(cartBasket: ICartBasket): void {
+    this.cart.subscribe((c) => {
+      c.cartBaskets!.push(cartBasket);
+      this.cart.next(c);
+    });
   }
 
-  removeCartBasket(cartBasket: ICartBasket) {
-    this.count.next(this.cartValue.cartBasket = this.cartValue.cartBasket.filter(item => item !== cartBasket));
+  removeCartBasket(cartBasket: ICartBasket): void {
+    this.cart.subscribe((c) => {
+      c.cartBaskets = c.cartBaskets!.filter(item => item !== cartBasket);
+      this.cart.next(c);
+    });
   }
 }

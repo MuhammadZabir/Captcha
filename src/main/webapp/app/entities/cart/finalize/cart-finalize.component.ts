@@ -11,6 +11,7 @@ import { IUserExtra } from 'app/entities/user-extra/user-extra.model';
 import { ICartBasket } from 'app/entities/cart-basket/cart-basket.model';
 import { UserExtraService } from 'app/entities/user-extra/service/user-extra.service';
 import { CartBasketService } from 'app/entities/cart-basket/service/cart-basket.service';
+import { CartSharedService } from 'app/shared/cart/cart-shared.service';
 
 @Component({
   selector: 'jhi-cart-finalize',
@@ -37,15 +38,18 @@ export class CartFinalizeComponent implements OnInit {
     protected cartService: CartService,
     protected cartBasketService: CartBasketService,
     protected userExtraService: UserExtraService,
+    protected cartSharedService: CartSharedService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ cart }) => {
-      this.updateForm(cart);
+    this.activatedRoute.data.subscribe(() => {
+      this.cartSharedService.cart.subscribe((cart: ICart) => {
+        this.updateForm(cart);
 
-      this.loadRelationshipsOptions(cart.id!);
+        this.loadRelationshipsOptions(cart.id!);
+      });
     });
   }
 
