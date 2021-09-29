@@ -1,0 +1,3 @@
+id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;created_date;last_modified_by;last_modified_date
+3;buyer;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;Buyer;Buyer;buyer@localhost;;true;en;system;NULL;system;NULL
+4;seller;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;Seller;Seller;seller@localhost;;true;en;system;NULL;system;NULL

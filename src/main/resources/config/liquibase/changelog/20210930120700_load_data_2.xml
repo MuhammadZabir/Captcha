@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        JHipster core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="20210930120700_1" author="jhipster">
+        <loadData
+            file="config/liquibase/data/user2.csv"
+            separator=";"
+            tableName="jhi_user">
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/data/authority2.csv"
+            separator=";"
+            tableName="jhi_authority">
+            <column name="name" type="string"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/data/user_authority2.csv"
+            separator=";"
+            tableName="jhi_user_authority">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/fake-data/user_extra2.csv"
+            separator=";"
+            tableName="user_extra">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
