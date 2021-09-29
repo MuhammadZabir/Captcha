@@ -11,5 +11,9 @@ public final class AuthoritiesConstants {
 
     public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
+    public static final String BUYER = "ROLE_BUYER";
+
+    public static final String SELLER = "ROLE_SELLER";
+
     private AuthoritiesConstants() {}
 }

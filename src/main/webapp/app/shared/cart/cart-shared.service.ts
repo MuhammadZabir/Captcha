@@ -11,6 +11,7 @@ export class CartSharedService {
   cart: BehaviorSubject<ICart>;
 
   constructor() {
+    this.cartValue.cartBaskets = [];
     this.cart = new BehaviorSubject(this.cartValue);
   }
 

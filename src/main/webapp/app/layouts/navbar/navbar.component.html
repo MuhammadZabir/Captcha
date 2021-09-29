@@ -292,6 +292,38 @@
           </li>
         </ul>
       </li>
+      <li
+        *jhiHasAnyAuthority="'ROLE_BUYER'"
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="cart-menu" data-cy="cartMenu">
+          <span>
+            <fa-icon icon="shopping-cart"></fa-icon>
+            <span>({{  totalItem  }})</span>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="cart-menu">
+          <div *ngIf="cartBasketCollections && cartBasketCollections.length > 0; else empty">
+          <li *ngFor="let cartBasket of cartBasketCollections">
+            <div class="dropdown-item">
+              <fa-icon icon="shopping-bag" [fixedWidth]="true"></fa-icon>
+              <span>{{ cartBasket.item?.name }} x{{  cartBasket.amount  }}</span>
+            </div>
+          </li>
+          </div>
+          <ng-template #empty>
+            <li>
+              <div class="dropdown-item">
+                <span>There is no items in the basket.</span>
+              </div>
+            </li>
+          </ng-template>
+        </ul>
+      </li>
     </ul>
   </div>
 </nav>
