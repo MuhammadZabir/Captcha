@@ -16,16 +16,12 @@ export class CartSharedService {
   }
 
   addCartBasket(cartBasket: ICartBasket): void {
-    this.cart.subscribe((c) => {
-      c.cartBaskets!.push(cartBasket);
-      this.cart.next(c);
-    });
+    this.cartValue.cartBaskets!.push(cartBasket);
+    this.cart.next(this.cartValue);
   }
 
   removeCartBasket(cartBasket: ICartBasket): void {
-    this.cart.subscribe((c) => {
-      c.cartBaskets = c.cartBaskets!.filter(item => item !== cartBasket);
-      this.cart.next(c);
-    });
+    this.cartValue.cartBaskets = this.cartValue.cartBaskets!.filter(item => item !== cartBasket);
+    this.cart.next(this.cartValue);
   }
 }

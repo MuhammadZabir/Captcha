@@ -14,6 +14,15 @@
         <dd>
           <span>{{ item.id }}</span>
         </dd>
+        <dt><span>Image</span></dt>
+        <div *ngIf="imageCollection && imageCollection.length > 0; else empty">
+          <dd *ngFor="let image of imageCollection;">
+            <img class="image" src="{{  image.imageDir  }}"/>
+          </dd>
+        </div>
+        <ng-template #empty>
+          <dd>No Image</dd>
+        </ng-template>
         <dt><span>Name</span></dt>
         <dd>
           <span>{{ item.name }}</span>
@@ -21,10 +30,6 @@
         <dt><span>Description</span></dt>
         <dd>
           <span>{{ item.description }}</span>
-        </dd>
-        <dt><span>Category</span></dt>
-        <dd>
-          <span>{{ item.category }}</span>
         </dd>
         <dt><span>Price</span></dt>
         <dd>
@@ -42,8 +47,8 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/item', item.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      <button type="button" (click)="addToBasket()" class="btn btn-primary">
+        <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add</span>
       </button>
     </div>
   </div>
