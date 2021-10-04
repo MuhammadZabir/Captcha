@@ -8,6 +8,7 @@ import { IItem } from '../item.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ItemService } from '../service/item.service';
+import { ImageService } from 'app/entities/image/service/image.service';
 import { ItemDeleteDialogComponent } from '../delete/item-delete-dialog.component';
 
 @Component({
@@ -15,7 +16,7 @@ import { ItemDeleteDialogComponent } from '../delete/item-delete-dialog.componen
   templateUrl: './item.component.html',
 })
 export class ItemComponent implements OnInit {
-  items?: IItem[];
+  items?: IItem[] = [];
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
@@ -24,9 +25,11 @@ export class ItemComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  results: any[] = [];
 
   constructor(
     protected itemService: ItemService,
+    protected imageService: ImageService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected modalService: NgbModal
@@ -101,6 +104,45 @@ export class ItemComponent implements OnInit {
     });
   }
 
+  getImage(): void {
+    this.isLoading = true;
+    if (this.items) {
+      for (const item of this.items) {
+        if (item.images) {
+          this.imageService.getImage(item.images[0]!.imageDir!).subscribe(result => {
+            this.createImageFromBlob(result);
+          });
+        }
+      }
+    }
+    this.isLoading = false;
+  }
+
+  getImageTest(): void {
+    this.isLoading = true;
+    if (this.items) {
+      for (const item of this.items) {
+        this.imageService.getImage('/images/banana.jpeg').subscribe(result => {
+          this.createImageFromBlob(result);
+        });
+      }
+    }
+    this.isLoading = false;
+  }
+
+  createImageFromBlob(image: Blob): void {
+    const reader = new FileReader();
+    reader.addEventListener(
+        'load',
+        () => {
+            this.results.push(reader.result);
+        },
+        false
+    );
+
+    reader.readAsDataURL(image);
+  }
+
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
@@ -140,6 +182,7 @@ export class ItemComponent implements OnInit {
     }
     this.items = data ?? [];
     this.ngbPaginationPage = this.page;
+    this.getImageTest();
   }
 
   protected onError(): void {

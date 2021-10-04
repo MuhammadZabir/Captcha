@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -16,7 +18,7 @@ export class ImageService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/images');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/images');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService, protected domSanitizer: DomSanitizer) {}
 
   create(image: IImage): Observable<EntityResponseType> {
     return this.http.post<IImage>(this.resourceUrl, image, { observe: 'response' });
@@ -32,6 +34,10 @@ export class ImageService {
 
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IImage>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  getImage(directory: string): Observable<Blob> {
+    return this.http.post("api/utility/get-image", directory, { responseType: 'blob' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

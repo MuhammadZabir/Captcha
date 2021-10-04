@@ -51,7 +51,7 @@
       <thead>
       <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
         <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-        <th scope="col"><span>Image</span></fa-icon></th>
+        <th scope="col"><span>Image</span></th>
         <th scope="col" jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
         <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
         <th scope="col" jhiSortBy="price"><span>Price</span> <fa-icon icon="sort"></fa-icon></th>
@@ -60,17 +60,19 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of items; trackBy: trackId" data-cy="entityTable">
+      <tr *ngFor="let item of items; trackBy: trackId; let i = index" data-cy="entityTable">
         <td>
           <a [routerLink]="['/item', item.id, 'view']">{{ item.id }}</a>
         </td>
         <td>
-          <div *ngIf="item.images && item.images.length > 0; else empty">
-            <img class="images" src="{{  item.images[0]?.imageDir  }}"/>
-          </div>
-          <ng-template #empty>
-            <span>No Image</span>
-          </ng-template>
+<!--          <div *ngIf="item.images && item.images.length > 0; else empty">-->
+            <div *ngIf="results && results.length > 0 && !isLoading">
+              <img class="logo-img" [src]="results[i] | safeHtml" name="result-{{ i }}"/>
+            </div>
+<!--          </div>-->
+<!--          <ng-template #empty>-->
+<!--            <span>No Image</span>-->
+<!--          </ng-template>-->
         </td>
         <td>{{ item.name }}</td>
         <td>{{ item.description }}</td>
