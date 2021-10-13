@@ -1,7 +1,11 @@
 package com.test.captcha.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.test.captcha.domain.Cart} entity.
@@ -18,7 +22,11 @@ public class CartDTO implements Serializable {
 
     private String realCaptcha;
 
+    @JsonBackReference
     private UserExtraDTO buyer;
+
+    @JsonManagedReference
+    private Set<CartBasketDTO> cartBaskets;
 
     public Long getId() {
         return id;
@@ -66,6 +74,37 @@ public class CartDTO implements Serializable {
 
     public void setBuyer(UserExtraDTO buyer) {
         this.buyer = buyer;
+    }
+
+    public Set<CartBasketDTO> getCartBaskets() {
+        return this.cartBaskets;
+    }
+
+    public CartDTO cartBaskets(Set<CartBasketDTO> cartBaskets) {
+        this.setCartBaskets(cartBaskets);
+        return this;
+    }
+
+    public CartDTO addCartBasket(CartBasketDTO cartBasket) {
+        this.cartBaskets.add(cartBasket);
+        cartBasket.setCart(this);
+        return this;
+    }
+
+    public CartDTO removeCartBasket(CartBasketDTO cartBasket) {
+        this.cartBaskets.remove(cartBasket);
+        cartBasket.setCart(null);
+        return this;
+    }
+
+    public void setCartBaskets(Set<CartBasketDTO> cartBaskets) {
+        if (this.cartBaskets != null) {
+            this.cartBaskets.forEach(i -> i.setCart(null));
+        }
+        if (cartBaskets != null) {
+            cartBaskets.forEach(i -> i.setCart(this));
+        }
+        this.cartBaskets = cartBaskets;
     }
 
     @Override

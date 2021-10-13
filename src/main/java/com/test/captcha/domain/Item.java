@@ -34,7 +34,6 @@ public class Item implements Serializable {
     @Column("price")
     private Double price;
 
-    @Transient
     @JsonIgnoreProperties(value = { "item" }, allowSetters = true)
     private Set<Image> images = new HashSet<>();
 

@@ -59,6 +59,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'CartBaskets' },
         loadChildren: () => import('./cart-basket/cart-basket.module').then(m => m.CartBasketModule),
       },
+      {
+        path: 'cart-finalize',
+        data: { pageTitle: 'Checkout' },
+        loadChildren: () => import('./finalize/finalize.module').then(m => m.FinalizeModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

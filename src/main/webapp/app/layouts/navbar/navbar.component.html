@@ -308,12 +308,20 @@
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="cart-menu">
           <div *ngIf="cartBasketCollections && cartBasketCollections.length > 0; else empty">
-          <li *ngFor="let cartBasket of cartBasketCollections">
-            <div class="dropdown-item">
-              <fa-icon icon="shopping-bag" [fixedWidth]="true"></fa-icon>
-              <span>{{ cartBasket.item?.name }} x{{  cartBasket.amount  }}</span>
-            </div>
-          </li>
+            <li *ngFor="let cartBasket of cartBasketCollections; let i = index">
+              <div class="dropdown-item custom-inline">
+                <a
+                  class="dropdown-item"
+                  routerLink="cart-finalize"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <img class="cart-basket-image" [src]="itemImageCollections[i] | safeHtml" name="image-cart-{{ i }}"/>
+                  <span>{{ cartBasket.item?.name }} x{{  cartBasket.amount  }}</span>
+                </a>
+              </div>
+            </li>
           </div>
           <ng-template #empty>
             <li>

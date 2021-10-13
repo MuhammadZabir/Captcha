@@ -25,6 +25,7 @@ public class UserExtra implements Serializable {
     @Column("billing_address")
     private String billingAddress;
 
+    @Column("user_id")
     private Long userId;
 
     @Transient

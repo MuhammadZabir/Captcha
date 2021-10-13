@@ -5,6 +5,7 @@ import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IItem } from '../item.model';
+import { IImage } from 'app/entities/image/image.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ItemService } from '../service/item.service';
@@ -25,7 +26,7 @@ export class ItemComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
-  results: any[] = [];
+  results: Map<string, any> = new Map<string, any>();
 
   constructor(
     protected itemService: ItemService,
@@ -108,34 +109,23 @@ export class ItemComponent implements OnInit {
     this.isLoading = true;
     if (this.items) {
       for (const item of this.items) {
-        if (item.images) {
-          this.imageService.getImage(item.images[0]!.imageDir!).subscribe(result => {
-            this.createImageFromBlob(result);
+        this.imageService.findByItem(item.id!).subscribe((res: HttpResponse<IImage[]>) => {
+          const images: IImage[] = res.body!;
+          this.imageService.getImage(images[0]!.imageDir!).subscribe(result => {
+            this.createImageFromBlob(result, item.name!);
           });
-        }
-      }
-    }
-    this.isLoading = false;
-  }
-
-  getImageTest(): void {
-    this.isLoading = true;
-    if (this.items) {
-      for (const item of this.items) {
-        this.imageService.getImage('/images/banana.jpeg').subscribe(result => {
-          this.createImageFromBlob(result);
         });
       }
     }
     this.isLoading = false;
   }
 
-  createImageFromBlob(image: Blob): void {
+  createImageFromBlob(image: Blob, key: string): void {
     const reader = new FileReader();
     reader.addEventListener(
         'load',
         () => {
-            this.results.push(reader.result);
+            this.results.set(key, reader.result);
         },
         false
     );
@@ -182,7 +172,7 @@ export class ItemComponent implements OnInit {
     }
     this.items = data ?? [];
     this.ngbPaginationPage = this.page;
-    this.getImageTest();
+    this.getImage();
   }
 
   protected onError(): void {

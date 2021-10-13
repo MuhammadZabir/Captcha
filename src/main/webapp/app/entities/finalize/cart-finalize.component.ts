@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { finalize, map, mergeMap } from 'rxjs/operators';
 
-import { ICart, Cart } from '../cart.model';
-import { CartService } from '../service/cart.service';
+import { ICart, Cart } from 'app/entities/cart/cart.model';
+import { CartService } from 'app/entities/cart/service/cart.service';
 import { IUserExtra } from 'app/entities/user-extra/user-extra.model';
 import { ICartBasket } from 'app/entities/cart-basket/cart-basket.model';
 import { UserExtraService } from 'app/entities/user-extra/service/user-extra.service';
@@ -23,16 +23,9 @@ export class CartFinalizeComponent implements OnInit {
   totalPrice = 0;
   buyersCollection: IUserExtra[] = [];
   cartBasketsCollection: ICartBasket[] = [];
-
-  editForm = this.fb.group({
-    id: [],
-    totalPrice: [],
-    captcha: [],
-    hiddenCaptcha: [],
-    realCaptcha: [],
-
-    buyer: [],
-  });
+  imagesCollection: any[] = [];
+  cart: ICart = {};
+  isAllow = false;
 
   constructor(
     protected cartService: CartService,
@@ -44,12 +37,8 @@ export class CartFinalizeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(() => {
-      this.cartSharedService.cart.subscribe((cart: ICart) => {
-        this.updateForm(cart);
-
-        this.loadRelationshipsOptions(cart.id!);
-      });
+    this.cartSharedService.cart.subscribe((cart: ICart) => {
+      this.updateForm(cart);
     });
   }
 
@@ -59,16 +48,21 @@ export class CartFinalizeComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const cart = this.createFromForm();
-    if (cart.id !== undefined) {
-      this.subscribeToSaveResponse(this.cartService.update(cart));
-    } else {
-      this.subscribeToSaveResponse(this.cartService.create(cart));
-    }
+    this.subscribeToSaveResponse(this.cartService.create(this.cart));
   }
 
   trackUserExtraById(index: number, item: IUserExtra): number {
     return item.id!;
+  }
+
+  validate(event: Event): void {
+    const captchaValue = (event.target as HTMLInputElement).value;
+    if (captchaValue === this.cart.hiddenCaptcha) {
+      this.isAllow = true;
+    } else {
+      this.isAllow = false;
+    }
+    this.cart.captcha = captchaValue;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICart>>): void {
@@ -79,6 +73,7 @@ export class CartFinalizeComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
+    this.cartSharedService.renewCartBasket();
     this.previousState();
   }
 
@@ -91,43 +86,20 @@ export class CartFinalizeComponent implements OnInit {
   }
 
   protected updateForm(cart: ICart): void {
-    this.cartService.getCaptcha(cart).pipe(finalize(() => this.onSaveFinalize())).subscribe();
-    this.cartBasketService.findByCartId(cart.id!).pipe(map((res: HttpResponse<ICartBasket[]>) => res.body ?? []))
-    .subscribe((cartBaskets: ICartBasket[]) => (this.cartBasketsCollection = cartBaskets));
-    this.editForm.patchValue({
-      id: cart.id,
-      totalPrice: cart.totalPrice,
-      hiddenCaptcha: cart.hiddenCaptcha,
-      realCaptcha: cart.realCaptcha,
-      buyer: cart.buyer,
+    this.cartService.getCaptcha(cart).pipe(mergeMap((httpCart: HttpResponse<ICart>) => of(httpCart.body))).subscribe(
+      (cartValue: ICart | null) => {
+        this.cart = cartValue!;
+        if (this.cart.cartBaskets) {
+          this.cartBasketsCollection = this.cart.cartBaskets;
+          this.calculatingTotalPrice();
+          this.cart.totalPrice = this.totalPrice;
+        }
+      });
+
+    this.cartSharedService.images.subscribe((imageCollection) => {
+      this.imagesCollection = imageCollection;
     });
-
-    this.calculatingTotalPrice();
-
     this.buyersCollection = this.userExtraService.addUserExtraToCollectionIfMissing(this.buyersCollection, cart.buyer);
-  }
-
-  protected loadRelationshipsOptions(id: number): void {
-    this.userExtraService
-      .query({ filter: 'cart-is-null' })
-      .pipe(map((res: HttpResponse<IUserExtra[]>) => res.body ?? []))
-      .pipe(
-        map((userExtras: IUserExtra[]) =>
-          this.userExtraService.addUserExtraToCollectionIfMissing(userExtras, this.editForm.get('buyer')!.value)
-        )
-      )
-      .subscribe((userExtras: IUserExtra[]) => (this.buyersCollection = userExtras));
-  }
-
-  protected createFromForm(): ICart {
-    return {
-      ...new Cart(),
-      id: this.editForm.get(['id'])!.value,
-      totalPrice: this.editForm.get(['totalPrice'])!.value,
-      hiddenCaptcha: this.editForm.get(['hiddenCaptcha'])!.value,
-      realCaptcha: this.editForm.get(['realCaptcha'])!.value,
-      buyer: this.editForm.get(['buyer'])!.value,
-    };
   }
 
   protected calculatingTotalPrice(): void {

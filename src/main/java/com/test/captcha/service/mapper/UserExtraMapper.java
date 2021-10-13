@@ -9,8 +9,8 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { UserMapper.class, UserTypeMapper.class })
 public interface UserExtraMapper extends EntityMapper<UserExtraDTO, UserExtra> {
-    @Mapping(target = "user", source = "user", qualifiedByName = "id")
-    @Mapping(target = "userType", source = "userType", qualifiedByName = "id")
+//    @Mapping(target = "user", source = "user", qualifiedByName = "id")
+//    @Mapping(target = "userType", source = "userType", qualifiedByName = "id")
     UserExtraDTO toDto(UserExtra s);
 
     @Named("id")

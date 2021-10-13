@@ -68,4 +68,12 @@ public interface ImageService {
      * @return the list of entities.
      */
     Flux<ImageDTO> search(String query);
+
+    /**
+     * Get all the images by Item ID.
+     *
+     * @param id the id of the Item.
+     * @return the list of entities.
+     */
+    Flux<ImageDTO> findAllByItem(Long id);
 }

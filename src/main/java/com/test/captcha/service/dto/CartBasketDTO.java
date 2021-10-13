@@ -1,5 +1,7 @@
 package com.test.captcha.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ public class CartBasketDTO implements Serializable {
 
     private Integer amount;
 
+    @JsonBackReference
     private CartDTO cart;
 
     private ItemDTO item;

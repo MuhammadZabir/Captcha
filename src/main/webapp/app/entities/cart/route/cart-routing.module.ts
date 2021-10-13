@@ -5,7 +5,6 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 import { CartComponent } from '../list/cart.component';
 import { CartDetailComponent } from '../detail/cart-detail.component';
 import { CartUpdateComponent } from '../update/cart-update.component';
-import { CartFinalizeComponent } from '../finalize/cart-finalize.component';
 import { CartRoutingResolveService } from './cart-routing-resolve.service';
 
 const cartRoute: Routes = [
@@ -33,14 +32,6 @@ const cartRoute: Routes = [
   {
     path: ':id/edit',
     component: CartUpdateComponent,
-    resolve: {
-      cart: CartRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':finalize',
-    component: CartFinalizeComponent,
     resolve: {
       cart: CartRoutingResolveService,
     },

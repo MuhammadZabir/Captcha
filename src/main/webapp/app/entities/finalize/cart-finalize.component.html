@@ -1,0 +1,86 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()">
+      <h2 id="jhi-cart-heading" data-cy="CartCreateUpdateHeading">Cart Basket</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="table-responsive" id="entities" *ngIf="cartBasketsCollection && cartBasketsCollection.length > 0; else empty">
+          <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 25%"><span>Image</span></th>
+                <th scope="col" style="width: 65%"><span>Name</span></th>
+                <th scope="col" style="width: 10%"><span>Price</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cartBasket of cartBasketsCollection; let i = index" data-cy="entityTable">
+                <td>
+                  <img class="img-fluid" [src]="imagesCollection[i] | safeHtml" name="image-{{ i }}"/>
+                </td>
+                <td class="align-middle">
+                  <a [routerLink]="['/cart-basket', cartBasket.item?.id, 'view']">
+                    {{ cartBasket.item?.name }} x{{ cartBasket.amount }}
+                  </a>
+                </td>
+                <td class="align-middle">RM {{ cartBasket.item?.price }}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>Total Price</strong></td>
+                <td>RM {{ totalPrice }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="cart.realCaptcha">
+          <div class="row">
+            <div class="col">
+              <span>Captcha</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <img class="img-thumbnail" [src]="'data:realCaptcha/jpg;base64,' + cart.realCaptcha | safeHtml" name="captcha" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" (change)="validate($event)"/>
+            </div>
+            <div *ngIf="!isAllow" class="col">
+              <fa-icon icon="times"></fa-icon>
+            </div>
+            <div *ngIf="isAllow" class="col">
+              <fa-icon icon="check"></fa-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template class="col-12" #empty>
+        <div class="row-md jh-entity-details">
+          <h3>There is no items in the basket.</h3>
+        </div>
+      </ng-template>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="isSaving || !isAllow"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="shopping-cart"></fa-icon>&nbsp;<span>Checkout</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit, OnChanges {
   version = '';
   account: Account | null = null;
   cartBasketCollections: ICartBasket[] = [];
+  itemImageCollections: any[] = [];
   totalItem = 0;
 
   constructor(
@@ -71,6 +72,9 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.cartSharedService.cart.subscribe((cart) => {
       this.cartBasketCollections = cart.cartBaskets!;
       this.totalItem = this.cartBasketCollections.length;
+    });
+    this.cartSharedService.images.subscribe((imageCollection) => {
+      this.itemImageCollections = imageCollection;
     });
   }
 }

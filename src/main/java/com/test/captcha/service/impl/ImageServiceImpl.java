@@ -104,4 +104,11 @@ public class ImageServiceImpl implements ImageService {
         log.debug("Request to search Images for query {}", query);
         return imageSearchRepository.search(query).map(imageMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Flux<ImageDTO> findAllByItem(Long id) {
+        log.debug("Request to get all Images by Item ID : {}", id);
+        return imageRepository.findByItem(id).map(imageMapper::toDto);
+    }
 }

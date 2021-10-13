@@ -1,5 +1,6 @@
 package com.test.captcha.service;
 
+import com.test.captcha.domain.User;
 import com.test.captcha.service.dto.UserExtraDTO;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
@@ -71,4 +72,13 @@ public interface UserExtraService {
      * @return the list of entities.
      */
     Flux<UserExtraDTO> search(String query, Pageable pageable);
+
+    /**
+     * Get the userExtra by User "id".
+     *
+     * @param user the query of the search.
+     *
+     * @return the of User Extra.
+     */
+    Mono<UserExtraDTO> findByUser(User user);
 }

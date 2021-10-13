@@ -1,16 +1,25 @@
 package com.test.captcha.web.rest;
 
 import cn.apiclub.captcha.Captcha;
+import com.test.captcha.domain.User;
+import com.test.captcha.domain.UserExtra;
 import com.test.captcha.repository.CartRepository;
 import com.test.captcha.service.CartService;
+import com.test.captcha.service.UserExtraService;
+import com.test.captcha.service.UserService;
 import com.test.captcha.service.dto.CartDTO;
+import com.test.captcha.service.dto.UserExtraDTO;
 import com.test.captcha.utility.UtilityCaptcha;
 import com.test.captcha.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.reactive.ResponseUtil;
 
@@ -40,11 +50,17 @@ public class CartResource {
 
     private final CartService cartService;
 
+    private final UserService userService;
+
+    private final UserExtraService userExtraService;
+
     private final CartRepository cartRepository;
 
-    public CartResource(CartService cartService, CartRepository cartRepository) {
+    public CartResource(CartService cartService, UserService userService, CartRepository cartRepository, UserExtraService userExtraService) {
         this.cartService = cartService;
+        this.userService = userService;
         this.cartRepository = cartRepository;
+        this.userExtraService = userExtraService;
     }
 
     /**
@@ -60,20 +76,31 @@ public class CartResource {
         if (cartDTO.getId() != null) {
             throw new BadRequestAlertException("A new cart cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return cartService
-            .save(cartDTO)
-            .map(
-                result -> {
-                    try {
-                        return ResponseEntity
-                            .created(new URI("/api/carts/" + result.getId()))
-                            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-                            .body(result);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            );
+
+        if (!cartDTO.getCaptcha().equals(cartDTO.getHiddenCaptcha())) {
+            throw new BadRequestAlertException("False captcha", ENTITY_NAME, "idexists");
+        }
+
+        cartDTO.setId(new Random().nextLong());
+        return Mono.just(ResponseEntity
+            .created(new URI("/"))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, cartDTO.getId().toString()))
+            .body(cartDTO));
+
+//        return cartService
+//            .save(cartDTO)
+//            .map(
+//                result -> {
+//                    try {
+//                        return ResponseEntity
+//                            .created(new URI("/api/carts/" + result.getId()))
+//                            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+//                            .body(result);
+//                    } catch (URISyntaxException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            );
     }
 
     /**
@@ -241,9 +268,8 @@ public class CartResource {
     }
 
     /**
-     * {@code PATCH  /carts/captcha/:id} : Get particular captcha of an existing cart, field will ignore if it is null
+     * {@code POST  /carts/captcha/:id} : Get particular captcha of an existing cart, field will ignore if it is null
      *
-     * @param id the id of the cartDTO to save.
      * @param cartDTO the cartDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated cartDTO,
      * or with status {@code 400 (Bad Request)} if the cartDTO is not valid,
@@ -251,25 +277,20 @@ public class CartResource {
      * or with status {@code 500 (Internal Server Error)} if the cartDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "carts/captcha/{id}", consumes = "application/merge-patch+json")
-    public Mono<ResponseEntity<CartDTO>> getCaptcha(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CartDTO cartDTO
-    ) {
-        log.debug("REST request to get Captcha for Cart : {}, {}", id, cartDTO);
-        if (cartDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, cartDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+    @PostMapping(value = "carts/captcha")
+    public Mono<ResponseEntity<CartDTO>> getCaptcha(@RequestBody CartDTO cartDTO) throws ExecutionException, InterruptedException {
+        log.debug("REST request to get Captcha for Cart : {}", cartDTO);
+        if (cartDTO == null) {
+            throw new BadRequestAlertException("Invalid Cart", ENTITY_NAME, "idinvalid");
         }
 
-        Captcha captcha = UtilityCaptcha.createCaptcha(240, 70);
-        cartDTO.setHiddenCaptcha(captcha.getAnswer());
-        cartDTO.setRealCaptcha(UtilityCaptcha.encodeCaptcha(captcha));
-
-        return Mono.just(ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, cartDTO.getId()
-                .toString())).body(cartDTO));
+        return userService.getUserWithAuthorities().map(user -> user).flatMap(this.userExtraService::findByUser).map(result -> {
+            Captcha captcha = UtilityCaptcha.createCaptcha(240, 70);
+            cartDTO.setHiddenCaptcha(captcha.getAnswer());
+            cartDTO.setRealCaptcha(UtilityCaptcha.encodeCaptcha(captcha));
+            cartDTO.setBuyer(result);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, "")).body(cartDTO);
+        });
     }
 }

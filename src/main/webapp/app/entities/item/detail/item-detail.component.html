@@ -15,9 +15,11 @@
           <span>{{ item.id }}</span>
         </dd>
         <dt><span>Image</span></dt>
-        <div *ngIf="imageCollection && imageCollection.length > 0; else empty">
-          <dd *ngFor="let image of imageCollection;">
-            <img class="image" src="{{  image.imageDir  }}"/>
+        <div *ngIf="results && results.length > 0; else empty">
+          <dd class="row">
+            <div *ngFor="let res of results; let i = index" class="col-2">
+              <img class="img-fluid" [src]="res | safeHtml" name="result-{{ i }}"/>
+            </div>
           </dd>
         </div>
         <ng-template #empty>

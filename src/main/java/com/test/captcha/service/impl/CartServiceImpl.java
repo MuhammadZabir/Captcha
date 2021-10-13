@@ -43,7 +43,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public Mono<CartDTO> save(CartDTO cartDTO) {
         log.debug("Request to save Cart : {}", cartDTO);
-        return cartRepository.save(cartMapper.toEntity(cartDTO)).flatMap(cartSearchRepository::save).map(cartMapper::toDto);
+//        return cartRepository.save(cartMapper.toEntity(cartDTO)).flatMap(cartSearchRepository::save).map(cartMapper::toDto);
+        return cartRepository.save(cartMapper.toEntity(cartDTO)).map(cartMapper::toDto);
     }
 
     @Override
@@ -60,13 +61,13 @@ public class CartServiceImpl implements CartService {
                 }
             )
             .flatMap(cartRepository::save)
-            .flatMap(
-                savedCart -> {
-                    cartSearchRepository.save(savedCart);
-
-                    return Mono.just(savedCart);
-                }
-            )
+//            .flatMap(
+//                savedCart -> {
+//                    cartSearchRepository.save(savedCart);
+//
+//                    return Mono.just(savedCart);
+//                }
+//            )
             .map(cartMapper::toDto);
     }
 
@@ -95,7 +96,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public Mono<Void> delete(Long id) {
         log.debug("Request to delete Cart : {}", id);
-        return cartRepository.deleteById(id).then(cartSearchRepository.deleteById(id));
+//        return cartRepository.deleteById(id).then(cartSearchRepository.deleteById(id));
+        return cartRepository.deleteById(id);
     }
 
     @Override

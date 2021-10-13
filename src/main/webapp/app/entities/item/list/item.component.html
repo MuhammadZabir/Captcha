@@ -64,10 +64,10 @@
         <td>
           <a [routerLink]="['/item', item.id, 'view']">{{ item.id }}</a>
         </td>
-        <td>
+        <td class="col-md-2">
 <!--          <div *ngIf="item.images && item.images.length > 0; else empty">-->
-            <div *ngIf="results && results.length > 0 && !isLoading">
-              <img class="logo-img" [src]="results[i] | safeHtml" name="result-{{ i }}"/>
+            <div *ngIf="results && results.size > 0 && !isLoading">
+              <img class="img-fluid" [src]="results.get(item.name!) | safeHtml" name="result-{{ i }}"/>
             </div>
 <!--          </div>-->
 <!--          <ng-template #empty>-->

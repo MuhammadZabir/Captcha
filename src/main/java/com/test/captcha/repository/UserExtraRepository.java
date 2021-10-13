@@ -1,13 +1,26 @@
 package com.test.captcha.repository;
 
+import com.test.captcha.domain.Authority;
+import com.test.captcha.domain.User;
 import com.test.captcha.domain.UserExtra;
+import com.test.captcha.domain.UserType;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Spring Data SQL reactive repository for the UserExtra entity.
@@ -16,9 +29,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface UserExtraRepository extends R2dbcRepository<UserExtra, Long>, UserExtraRepositoryInternal {
     Flux<UserExtra> findAllBy(Pageable pageable);
-
-    @Query("SELECT * FROM user_extra entity WHERE entity.user_id = :id")
-    Flux<UserExtra> findByUser(Long id);
 
     @Query("SELECT * FROM user_extra entity WHERE entity.user_id IS NULL")
     Flux<UserExtra> findAllWhereUserIsNull();
@@ -49,4 +59,5 @@ interface UserExtraRepositoryInternal {
     Mono<UserExtra> findById(Long id);
     Flux<UserExtra> findAllBy(Pageable pageable);
     Flux<UserExtra> findAllBy(Pageable pageable, Criteria criteria);
+    Mono<UserExtra> findOneByUser(User user);
 }

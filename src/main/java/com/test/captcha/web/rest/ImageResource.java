@@ -237,4 +237,16 @@ public class ImageResource {
         log.debug("REST request to search Images for query {}", query);
         return imageService.search(query).collectList();
     }
+
+    /**
+     * {@code GET  /images/item/:id} : get all the images by item id.
+     *
+     * @param id the id of the itemDTO.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of images in body.
+     */
+    @GetMapping("/images/item/{id}")
+    public Mono<List<ImageDTO>> getAllImagesByItem(@PathVariable Long id) {
+        log.debug("REST request to get all Images by Item ID : {}", id);
+        return imageService.findAllByItem(id).collectList();
+    }
 }

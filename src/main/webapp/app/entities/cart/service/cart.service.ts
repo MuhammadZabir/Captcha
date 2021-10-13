@@ -66,6 +66,6 @@ export class CartService {
   }
 
   getCaptcha(cart: ICart): Observable<EntityResponseType> {
-    return this.http.patch<ICart>(`${this.resourceUrl}/captcha/${getCartIdentifier(cart) as number}`, cart, { observe: 'response' });
+    return this.http.post<ICart>(`${this.resourceUrl}/captcha`, cart, { observe: 'response' });
   }
 }

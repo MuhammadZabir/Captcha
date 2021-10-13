@@ -3,7 +3,9 @@ package com.test.captcha.repository;
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
 
+import com.test.captcha.domain.User;
 import com.test.captcha.domain.UserExtra;
+import com.test.captcha.domain.UserType;
 import com.test.captcha.repository.rowmapper.UserExtraRowMapper;
 import com.test.captcha.repository.rowmapper.UserRowMapper;
 import com.test.captcha.repository.rowmapper.UserTypeRowMapper;
@@ -149,6 +151,34 @@ class UserExtraRepositoryInternalImpl implements UserExtraRepositoryInternal {
     public Mono<Integer> update(UserExtra entity) {
         //fixme is this the proper way?
         return r2dbcEntityTemplate.update(entity).thenReturn(1);
+    }
+
+    @Override
+    public Mono<UserExtra> findOneByUser(User user) {
+        return db
+            .sql("SELECT user_extra.*, user_type.name AS user_type_name, user_type.description AS user_type_description " +
+                "FROM user_extra JOIN jhi_user ON jhi_user.id = user_extra.user_id JOIN user_type ON user_extra.user_type_id " +
+                "= user_type.id WHERE jhi_user.id = :id")
+            .bind("id", user.getId())
+            .fetch()
+            .one()
+            .map(list -> {
+                UserExtra userExtra = new UserExtra();
+                userExtra.setId((Long) list.get("id"));
+                userExtra.setBillingAddress(String.valueOf(list.get("billing_address")));
+                userExtra.setUserId((Long) list.get("user_id"));
+                userExtra.setUserTypeId((Long) list.get("user_type_id"));
+                userExtra.setUser(user);
+
+                UserType userType = new UserType();
+                userType.setId((Long) list.get("user_type_id"));
+                userType.setName(String.valueOf(list.get("user_type_name")));
+                userType.setDescription(String.valueOf(list.get("user_type_description")));
+                userType.addUserExtra(userExtra);
+                userExtra.setUserType(userType);
+
+                return userExtra;
+            });
     }
 }
 

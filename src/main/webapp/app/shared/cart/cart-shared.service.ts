@@ -9,19 +9,34 @@ import { ICartBasket } from 'app/entities/cart-basket/cart-basket.model';
 export class CartSharedService {
   cartValue = <ICart>{};
   cart: BehaviorSubject<ICart>;
+  imagesValue: any[] = [];
+  images: BehaviorSubject<any[]>;
 
   constructor() {
     this.cartValue.cartBaskets = [];
     this.cart = new BehaviorSubject(this.cartValue);
+    this.images = new BehaviorSubject(this.imagesValue);
   }
 
-  addCartBasket(cartBasket: ICartBasket): void {
+  addCartBasket(cartBasket: ICartBasket, image: any): void {
     this.cartValue.cartBaskets!.push(cartBasket);
+    this.imagesValue.push(image);
     this.cart.next(this.cartValue);
+    this.images.next(this.imagesValue);
   }
 
-  removeCartBasket(cartBasket: ICartBasket): void {
-    this.cartValue.cartBaskets = this.cartValue.cartBaskets!.filter(item => item !== cartBasket);
+  removeCartBasket(index: number): void {
+    this.cartValue.cartBaskets!.splice(index, 1);
+    this.imagesValue.splice(index, 1)
     this.cart.next(this.cartValue);
+    this.images.next(this.imagesValue);
+  }
+
+  renewCartBasket(): void {
+    const cartValue = <ICart>{};
+    cartValue.cartBaskets = [];
+    const imagesValue: any[] = [];
+    this.cart.next(cartValue);
+    this.images.next(imagesValue);
   }
 }

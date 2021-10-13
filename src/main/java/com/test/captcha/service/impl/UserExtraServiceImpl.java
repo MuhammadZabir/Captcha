@@ -1,7 +1,6 @@
 package com.test.captcha.service.impl;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
+import com.test.captcha.domain.User;
 import com.test.captcha.domain.UserExtra;
 import com.test.captcha.repository.UserExtraRepository;
 import com.test.captcha.repository.search.UserExtraSearchRepository;
@@ -93,7 +92,7 @@ public class UserExtraServiceImpl implements UserExtraService {
     @Transactional(readOnly = true)
     public Mono<UserExtraDTO> findOne(Long id) {
         log.debug("Request to get UserExtra : {}", id);
-        return userExtraRepository.findById(id).map(userExtraMapper::toDto);
+        return userExtraRepository.findById(id).map(userExtra -> userExtraMapper.toDto(userExtra));
     }
 
     @Override
@@ -107,5 +106,12 @@ public class UserExtraServiceImpl implements UserExtraService {
     public Flux<UserExtraDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of UserExtras for query {}", query);
         return userExtraSearchRepository.search(query, pageable).map(userExtraMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Mono<UserExtraDTO> findByUser(User user) {
+        log.debug("Request to get UserExtra by User id: {}", user.getId());
+        return userExtraRepository.findOneByUser(user).map(userExtra -> userExtraMapper.toDto(userExtra));
     }
 }

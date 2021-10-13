@@ -1,8 +1,12 @@
 package com.test.captcha.service.dto;
 
+import com.test.captcha.domain.Image;
+import com.test.captcha.domain.Item;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.test.captcha.domain.Item} entity.
@@ -21,6 +25,8 @@ public class ItemDTO implements Serializable {
     private Double price;
 
     private ShopDTO shop;
+
+    private Set<ImageDTO> images;
 
     public Long getId() {
         return id;
@@ -68,6 +74,37 @@ public class ItemDTO implements Serializable {
 
     public void setShop(ShopDTO shop) {
         this.shop = shop;
+    }
+
+    public Set<ImageDTO> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<ImageDTO> images) {
+        if (this.images != null) {
+            this.images.forEach(i -> i.setItem(null));
+        }
+        if (images != null) {
+            images.forEach(i -> i.setItem(this));
+        }
+        this.images = images;
+    }
+
+    public ItemDTO images(Set<ImageDTO> images) {
+        this.setImages(images);
+        return this;
+    }
+
+    public ItemDTO addImage(ImageDTO image) {
+        this.images.add(image);
+        image.setItem(this);
+        return this;
+    }
+
+    public ItemDTO removeImage(ImageDTO image) {
+        this.images.remove(image);
+        image.setItem(null);
+        return this;
     }
 
     @Override
