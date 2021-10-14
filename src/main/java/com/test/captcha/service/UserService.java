@@ -68,7 +68,7 @@ public class UserService {
                     return saveUser(user);
                 }
             )
-            .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
+//            .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
             .doOnNext(user -> log.debug("Activated user: {}", user));
     }
 
@@ -162,7 +162,7 @@ public class UserService {
                         .thenReturn(newUser)
                         .doOnNext(user -> user.setAuthorities(authorities))
                         .flatMap(this::saveUser)
-                        .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
+//                        .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
                         .doOnNext(user -> log.debug("Created Information for User: {}", user));
                 }
             );

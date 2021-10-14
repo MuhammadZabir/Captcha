@@ -33,10 +33,10 @@ export class CartSharedService {
   }
 
   renewCartBasket(): void {
-    const cartValue = <ICart>{};
-    cartValue.cartBaskets = [];
-    const imagesValue: any[] = [];
-    this.cart.next(cartValue);
-    this.images.next(imagesValue);
+    this.cartValue = <ICart>{};
+    this.cartValue.cartBaskets = [];
+    this.imagesValue = [];
+    this.cart.next(this.cartValue);
+    this.images.next(this.imagesValue);
   }
 }
