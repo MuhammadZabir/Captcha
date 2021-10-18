@@ -27,7 +27,7 @@ export class CartSharedService {
 
   removeCartBasket(index: number): void {
     this.cartValue.cartBaskets!.splice(index, 1);
-    this.imagesValue.splice(index, 1)
+    this.imagesValue.splice(index, 1);
     this.cart.next(this.cartValue);
     this.images.next(this.imagesValue);
   }

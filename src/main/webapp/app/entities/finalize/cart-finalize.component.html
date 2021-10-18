@@ -11,8 +11,9 @@
             <thead>
               <tr>
                 <th scope="col" style="width: 25%"><span>Image</span></th>
-                <th scope="col" style="width: 65%"><span>Name</span></th>
+                <th scope="col" style="width: 60%"><span>Name</span></th>
                 <th scope="col" style="width: 10%"><span>Price</span></th>
+                <th scope="col" style="width: 5%"><span>Action</span></th>
               </tr>
             </thead>
             <tbody>
@@ -26,6 +27,12 @@
                   </a>
                 </td>
                 <td class="align-middle">RM {{ cartBasket.item?.price }}</td>
+                <td class="align-middle">
+                  <button (click)="removeItem(i)" class="btn btn-danger btn-sm">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Remove</span>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td></td>

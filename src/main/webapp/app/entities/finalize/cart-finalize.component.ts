@@ -47,8 +47,10 @@ export class CartFinalizeComponent implements OnInit {
   }
 
   save(): void {
-    this.isSaving = true;
-    this.subscribeToSaveResponse(this.cartService.create(this.cart));
+    if (this.cartBasketsCollection.length > 0) {
+      this.isSaving = true;
+      this.subscribeToSaveResponse(this.cartService.create(this.cart));
+    }
   }
 
   trackUserExtraById(index: number, item: IUserExtra): number {
@@ -63,6 +65,11 @@ export class CartFinalizeComponent implements OnInit {
       this.isAllow = false;
     }
     this.cart.captcha = captchaValue;
+  }
+
+  removeItem(index: number): void {
+    this.cartSharedService.removeCartBasket(index);
+    this.cartBasketsCollection.splice(index, 1);
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICart>>): void {
