@@ -27,7 +27,7 @@
         </a>
       </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-      <ng-template *ngSwitchCase="true">
+      <div *ngSwitchCase="true">
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown
@@ -178,7 +178,7 @@
             <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
           </ul>
         </li>
-      </ng-template>
+      </div>
       <li
         *jhiHasAnyAuthority="'ROLE_ADMIN'"
         ngbDropdown
