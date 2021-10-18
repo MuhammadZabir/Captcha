@@ -138,6 +138,14 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_authority">User Type</label>
+          <select class="form-control" id="field_authority" data-cy="authority" name="authority" formControlName="authority">
+            <option>Buyer</option>
+            <option>Seller</option>
+          </select>
+        </div>
+
         <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary" data-cy="submit">Register</button>
       </form>
 

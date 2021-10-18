@@ -1,6 +1,7 @@
 package com.test.captcha.web.rest;
 
 import com.test.captcha.repository.UserRepository;
+import com.test.captcha.security.AuthoritiesConstants;
 import com.test.captcha.security.SecurityUtils;
 import com.test.captcha.service.MailService;
 import com.test.captcha.service.UserService;
@@ -63,7 +64,13 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        return userService.registerUser(managedUserVM, managedUserVM.getPassword()).doOnSuccess(mailService::sendActivationEmail).then();
+        if (managedUserVM.getAuthority().equals("Buyer")) {
+            return userService.registerUser(managedUserVM, managedUserVM.getPassword(), AuthoritiesConstants.BUYER).doOnSuccess(mailService::sendActivationEmail).then();
+        } else if (managedUserVM.getAuthority().equals("Seller")) {
+            return userService.registerUser(managedUserVM, managedUserVM.getPassword(), AuthoritiesConstants.SELLER).doOnSuccess(mailService::sendActivationEmail).then();
+        } else {
+            throw new InvalidUserTypeException();
+        }
     }
 
     /**

@@ -107,7 +107,7 @@ public class UserService {
     }
 
     @Transactional
-    public Mono<User> registerUser(AdminUserDTO userDTO, String password) {
+    public Mono<User> registerUser(AdminUserDTO userDTO, String password, String authority) {
         return userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(
@@ -157,7 +157,7 @@ public class UserService {
                 newUser -> {
                     Set<Authority> authorities = new HashSet<>();
                     return authorityRepository
-                        .findById(AuthoritiesConstants.USER)
+                        .findById(authority)
                         .map(authorities::add)
                         .thenReturn(newUser)
                         .doOnNext(user -> user.setAuthorities(authorities))
