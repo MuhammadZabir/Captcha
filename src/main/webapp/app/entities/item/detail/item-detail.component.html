@@ -49,7 +49,7 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" (click)="addToBasket()" class="btn btn-primary">
+      <button *jhiHasAnyAuthority="'ROLE_BUYER', 'ROLE_ADMIN'" type="button" (click)="addToBasket()" class="btn btn-primary">
         <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add</span>
       </button>
     </div>
