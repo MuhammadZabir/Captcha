@@ -80,7 +80,7 @@
         <td>RM {{ item.price }}</td>
         <td>
           <div *ngIf="item.shop">
-            <a [routerLink]="['/shop', item.shop?.id, 'view']">{{ item.shop?.id }}</a>
+            <a [routerLink]="['/shop', item.shop?.id, 'view']">{{ item.shop?.name }}</a>
           </div>
         </td>
         <td class="text-right">

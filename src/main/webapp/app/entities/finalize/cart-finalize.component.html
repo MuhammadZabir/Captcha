@@ -22,7 +22,7 @@
                   <img class="img-fluid" [src]="imagesCollection[i] | safeHtml" name="image-{{ i }}"/>
                 </td>
                 <td class="align-middle">
-                  <a [routerLink]="['/cart-basket', cartBasket.item?.id, 'view']">
+                  <a [routerLink]="['/item', cartBasket.item?.id, 'view']">
                     {{ cartBasket.item?.name }} x{{ cartBasket.amount }}
                   </a>
                 </td>

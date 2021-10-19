@@ -20,12 +20,12 @@
         </dd>
         <dt><span>User</span></dt>
         <dd>
-          <span>{{ userExtra.user?.id }}</span>
+          <span>{{ userExtra.user?.login }}</span>
         </dd>
         <dt><span>User Type</span></dt>
         <dd>
           <div *ngIf="userExtra.userType">
-            <a [routerLink]="['/user-type', userExtra.userType?.id, 'view']">{{ userExtra.userType?.id }}</a>
+            <a [routerLink]="['/user-type', userExtra.userType?.id, 'view']">{{ userExtra.userType?.name }}</a>
           </div>
         </dd>
       </dl>
@@ -34,7 +34,7 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/user-extra', userExtra.id, 'edit']" class="btn btn-primary">
+      <button *jhiHasAnyAuthority="'ROLE_SELLER', 'ROLE_ADMIN'" type="button" [routerLink]="['/user-extra', userExtra.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>

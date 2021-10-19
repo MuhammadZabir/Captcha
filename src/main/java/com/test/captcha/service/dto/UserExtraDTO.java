@@ -14,9 +14,9 @@ public class UserExtraDTO implements Serializable {
 
     private String billingAddress;
 
-//    private UserDTO user;
-//
-//    private UserTypeDTO userType;
+    private UserDTO user;
+
+    private UserTypeDTO userType;
 
     public Long getId() {
         return id;
@@ -34,21 +34,21 @@ public class UserExtraDTO implements Serializable {
         this.billingAddress = billingAddress;
     }
 
-//    public UserDTO getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(UserDTO user) {
-//        this.user = user;
-//    }
-//
-//    public UserTypeDTO getUserType() {
-//        return userType;
-//    }
-//
-//    public void setUserType(UserTypeDTO userType) {
-//        this.userType = userType;
-//    }
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
+    public UserTypeDTO getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserTypeDTO userType) {
+        this.userType = userType;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -77,8 +77,8 @@ public class UserExtraDTO implements Serializable {
         return "UserExtraDTO{" +
             "id=" + getId() +
             ", billingAddress='" + getBillingAddress() + "'" +
-//            ", user=" + getUser() +
-//            ", userType=" + getUserType() +
+            ", user=" + getUser() +
+            ", userType=" + getUserType() +
             "}";
     }
 }

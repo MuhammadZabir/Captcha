@@ -41,5 +41,10 @@
             tableName="user_extra">
             <column name="user_id" type="numeric"/>
         </loadData>
+
+        <update tableName="shop">
+            <column name="owner_id" value="12"/>
+            <where> id='1'</where>
+        </update>
     </changeSet>
 </databaseChangeLog>

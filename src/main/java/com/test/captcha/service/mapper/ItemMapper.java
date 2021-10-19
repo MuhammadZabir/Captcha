@@ -9,7 +9,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { ShopMapper.class })
 public interface ItemMapper extends EntityMapper<ItemDTO, Item> {
-    @Mapping(target = "shop", source = "shop", qualifiedByName = "id")
+    //@Mapping(target = "shop", source = "shop", qualifiedByName = "id")
     ItemDTO toDto(Item s);
 
     @Named("id")

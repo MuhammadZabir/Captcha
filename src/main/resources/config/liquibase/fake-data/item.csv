@@ -1,11 +1,11 @@
-id;name;description;category;price
-1;Supervisor Berkshire;azure;Toy;87405
-2;McDonald;Bedfordshire Tuna;Toy;71410
-3;Loan integrated;Bedfordshire;Toy;61278
-4;Games Granite;purple back;Toy;27787
-5;frictionless;Wall;Toy;62480
-6;Shirt out-of;Salad Chips;Toy;56364
-7;Mississippi Hawaii;Paradigm open-source;Toy;28047
-8;Practical;content;Toy;37090
-9;best-of-breed;Supervisor Loan;Toy;66465
-10;monitor Grass;magenta;Toy;38689
+id;name;description;category;price;shop_id
+1;Fruit Toy 1;Fruit Toy 1;Toy;10.00;1
+2;Fruit Toy 2;Fruit Toy 2;Toy;15.00;1
+3;Fruit Toy 3;Fruit Toy 3;Toy;20.00;1
+4;Fruit Toy 4;Fruit Toy 4;Toy;25.00;1
+5;Shirt;T-Shirt;Toy;35.00;1
+6;Trouser;Blue Trouser;Toy;35.00;1
+7;Car;Vehicle;Toy;4000.00;1
+8;Bicycle;Vehicle;Toy;800.00;1
+9;Basketball Hoop;Basketball Hoop Ring;Toy;250.00;1
+10;Hoodie;Beautiful Hoodie;Toy;35.00;1
