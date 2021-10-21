@@ -26,7 +26,7 @@
                     {{ cartBasket.item?.name }} x{{ cartBasket.amount }}
                   </a>
                 </td>
-                <td class="align-middle">RM {{ cartBasket.item?.price }}</td>
+                <td class="align-middle">RM {{ calculatePrice(cartBasket.item!.price!, cartBasket.amount!) }}</td>
                 <td class="align-middle">
                   <button (click)="removeItem(i)" class="btn btn-danger btn-sm">
                     <fa-icon icon="times"></fa-icon>

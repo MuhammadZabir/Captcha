@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CartSharedService } from 'app/shared/cart/cart-shared.service';
 import { ImageService } from 'app/entities/image/service/image.service';
 
@@ -17,10 +18,15 @@ export class ItemDetailComponent implements OnInit {
   imageCollection: IImage[] = [];
   results: any[] = [];
 
+  editForm = this.fb.group({
+    amount: ['', [Validators.required, Validators.minLength(1)]],
+  });
+
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected cartSharedService: CartSharedService,
-    protected imageService: ImageService
+    protected imageService: ImageService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +46,7 @@ export class ItemDetailComponent implements OnInit {
 
   addToBasket(): void {
     const cartBasket = <ICartBasket>{};
-    cartBasket.amount = 1;
+    cartBasket.amount = this.editForm.get(['amount'])!.value;
     cartBasket.item = this.item;
     this.cartSharedService.addCartBasket(cartBasket, this.results[0]);
     this.previousState();

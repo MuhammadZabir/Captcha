@@ -72,6 +72,10 @@ export class CartFinalizeComponent implements OnInit {
     this.cartBasketsCollection.splice(index, 1);
   }
 
+  calculatePrice(price: number, amount: number): number {
+    return price * amount;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICart>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -114,7 +118,7 @@ export class CartFinalizeComponent implements OnInit {
     for (const cartBasket of this.cartBasketsCollection) {
       let price = 0;
       if (cartBasket.item?.price) {
-        price = cartBasket.item.price;
+        price = cartBasket.item.price * cartBasket.amount!;
       }
       this.totalPrice = this.totalPrice + price;
     }
